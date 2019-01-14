@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Authentication</title>
+
+</head>
+
+<body>
+    <div id="error"></div>
+    <h1>Signup</h1>
+    <form action="/signup" method="post">
+        <div>
+            <label>Username</label>
+            <input type="text" name="username" id="username" required/>
+        </div>
+        <div>
+            <label>Email</label>
+            <input type="email" name="email" id="email" required/>
+        </div>
+        <div>
+            <label>First Name</label>
+            <input type="text" name="firstname" id="firstname" required/>
+        </div>
+        <div>
+            <label>Last Name</label>
+            <input type="text" name="lastname" id="lastname" />
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" name="password" id="password" required/>
+        </div>
+        
+        <button id="signup-btn">Signup</button>
+    </form>
+
+    <hr />
+
+    <p>Already have an account?
+        <a href="/signin">Sign In</a>
+    </p>
+    <p>Or go to
+        <a href="/">Home</a>.</p>
+    <%- include polyfills.ejs %>    
+    <script>
+        document.getElementById('signup-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const firstName = document.getElementById('firstname').value;
+            const lastName = document.getElementById('lastname').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, email: email, firstName: firstName, lastName: lastName, password: password})
+            }).then(function (response) {
+                if (response.status === 200) {
+                    window.location.href = '/';
+                } else if (response.status === 403) {
+                    var generate = document.getElementById("error");
+                    generate.innerHTML = '<p>User already exists</p>';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
