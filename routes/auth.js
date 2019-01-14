@@ -78,7 +78,7 @@ module.exports = function (passport) {
         if (req.user) {
             return res.redirect('/');
         }
-        res.render('signin.ejs');
+        res.render('signin.ejs', {invalidCredentials: !!req.query['invalid_credentials']});
     });
 
     router.route('/signup').post(LoginController.signup);
@@ -86,7 +86,7 @@ module.exports = function (passport) {
     /**
      * Verifies username and password, if fails then redirects to /signin else takes to home page
      */
-    router.post('/signin', passport.authenticate('local'), function (req, res) {
+    router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin?invalid_credentials=true' }), function (req, res) {
         res.redirect('/');
     });
 
