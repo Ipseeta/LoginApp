@@ -15,15 +15,23 @@ exports.signup = function (req, res) {
         if (count > 0) {
             return res.status(403).end();
         }
-        new User({
+
+        const user = new User({
             username: username,
             password: SHA256(password),
             email: email,
             firstName: firstName,
             lastName: lastName
-        }).save(function (err, user) {
+        });
+
+        user.save(function (err) {
+            
+            if (err) {
+                return res.status(500).end();
+            }
+
             req.login(user, () => {
-                res.redirect('/');
+                res.json({ _id: user._id });
             });
         });
     });
@@ -33,7 +41,6 @@ exports.signup = function (req, res) {
  * updateUser will update the existing user, or will create a new one.
  */
 exports.updateUser = function (req, res) {
-
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
