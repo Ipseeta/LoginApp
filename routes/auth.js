@@ -55,7 +55,7 @@ module.exports = function (passport) {
      */
     router.get('/signup', function (req, res) {
         if (req.user) {
-            return res.render('index.ejs');
+            return res.redirect('/user');
         }
         res.render('signup.ejs');
     });
@@ -64,7 +64,17 @@ module.exports = function (passport) {
      */
     router.get('/', function (req, res) {
         if (req.user) {
-            return res.render('index.ejs', {
+            return res.redirect('/user');
+        }
+        res.redirect('/signin');
+    });
+
+    /**
+     * Loads user page
+     */
+    router.get('/user', function (req, res) {
+        if (req.user) {
+            return res.render('user.ejs', {
                 user: req.user
             });
         }
@@ -76,7 +86,7 @@ module.exports = function (passport) {
      */
     router.get('/signin', function (req, res) {
         if (req.user) {
-            return res.redirect('/');
+            return res.redirect('/user');
         }
         res.render('signin.ejs', {invalidCredentials: !!req.query['invalid_credentials']});
     });
@@ -87,7 +97,7 @@ module.exports = function (passport) {
      * Verifies username and password, if fails then redirects to /signin else takes to home page
      */
     router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin?invalid_credentials=true' }), function (req, res) {
-        res.redirect('/');
+        res.redirect('/user');
     });
 
     return router;
