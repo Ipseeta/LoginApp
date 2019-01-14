@@ -60,7 +60,7 @@
                 body: JSON.stringify({ username: username, email: email, firstName: firstName, lastName: lastName, password: password})
             }).then(function (response) {
                 if (response.status === 200) {
-                    window.location.href = '/';
+                    window.location.href = '/user';
                 } else if (response.status === 403) {
                     var generate = document.getElementById("error");
                     generate.innerHTML = '<p>User already exists</p>';

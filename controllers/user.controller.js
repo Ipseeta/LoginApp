@@ -28,3 +28,20 @@ exports.signup = function (req, res) {
         });
     });
 }
+
+/**
+ * updateUser will update the existing user, or will create a new one.
+ */
+exports.updateUser = function (req, res) {
+
+    const email = req.body.email;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+
+    User.updateOne({ _id: req.params.id }, { $set: {email: email, firstName: firstName, lastName: lastName}}).exec(function(err, user){
+        if(err) {
+            return res.status(403).end();
+        }
+        res.status(200).end();
+     });
+}

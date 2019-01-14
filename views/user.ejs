@@ -1,10 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title><%= user.firstName %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= user %></h1>
-  </body>
+
+<head>
+    <title>Authentication</title>
+
+</head>
+
+<body>
+    <div id="error"></div>
+    <h1>User Details for <%= user.username %></h1>
+    <form>
+
+        <div>
+            <label>Email</label>
+            <input type="email" name="email" id="email" value="<%= user.email %>"/>
+        </div>
+        <div>
+            <label>First Name</label>
+            <input type="text" name="firstname" id="firstname" value="<%= user.firstName %>"/>
+        </div>
+        <div>
+            <label>Last Name</label>
+            <input type="text" name="lastname" id="lastname"  value="<%= user.lastName %>" />
+        </div>
+        
+        <input type="submit" id="update-btn" value="Update"/>
+    </form>
+    <a href="/logout">Logout</a>.</p>
+    <hr />
+
+    <%- include polyfills.ejs %>    
+    <script>
+        document.getElementById('update-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const firstName = document.getElementById('firstname').value;
+            const lastName = document.getElementById('lastname').value;
+            if (!firstName) {
+              return alert("Please enter first name");
+            }
+            if (!email) {
+              return alert("Please enter first name");
+            }
+
+            fetch('/user/<%= user.id %>', {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, firstName: firstName, lastName: lastName})
+            }).then(function (response) {
+                if (response.status === 200) {
+                  return alert("User updated successfully");
+                } else if (response.status === 403) {
+                    var generate = document.getElementById("error");
+                    generate.innerHTML = '<p>Unable to update at this moment</p>';
+                }
+            });
+        });
+    </script>
+</body>
 </html>

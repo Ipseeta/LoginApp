@@ -7,6 +7,7 @@ const config = require('./config');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
 const auth = require('./routes/auth')(passport);
 
 const port = process.env.PORT || 3000;
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({ secret: 'cat', resave: false, saveUninitialized: true}));
+app.use(session({ secret: 'ae2b1fca515949e5d54fb22b8ed95575', resave: false, saveUninitialized: true, store: new RedisStore({ host: config.redis.host, port: config.redis.port }) }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 

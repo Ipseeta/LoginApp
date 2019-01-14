@@ -1,6 +1,6 @@
 const express = require('express'),
     router = express.Router(),
-    LoginController = require('../controllers/login.controller'),
+    UserController = require('../controllers/user.controller'),
     LocalStrategy = require('passport-local').Strategy,
     SHA256 = require('crypto-js/sha256'),
     User = require('../models/user');
@@ -88,16 +88,32 @@ module.exports = function (passport) {
         if (req.user) {
             return res.redirect('/user');
         }
-        res.render('signin.ejs', {invalidCredentials: !!req.query['invalid_credentials']});
+        res.render('signin.ejs', {
+            invalidCredentials: !!req.query['invalid_credentials']
+        });
     });
 
-    router.route('/signup').post(LoginController.signup);
+    router.route('/signup').post(UserController.signup);
 
     /**
      * Verifies username and password, if fails then redirects to /signin else takes to home page
      */
-    router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin?invalid_credentials=true' }), function (req, res) {
+    router.post('/signin', passport.authenticate('local', {
+        failureRedirect: '/signin?invalid_credentials=true'
+    }), function (req, res) {
         res.redirect('/user');
+    });
+    /**
+     * Update an user
+     */
+    router.route('/user/:id').put(UserController.updateUser);
+
+    /**
+     * Logout user
+     */
+    router.get('/logout', function (req, res) {
+        req.logout();
+        res.redirect('/signin');
     });
 
     return router;
