@@ -9,12 +9,15 @@ const passport = require('passport');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const auth = require('./routes/auth')(passport);
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const port = process.env.PORT || 3000;
 const baseUrl = process.env.BASE_URL || 'http://localhost:'
 
 let app = express();
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

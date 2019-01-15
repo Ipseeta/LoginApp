@@ -1,0 +1,234 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Login App API",
+        "description": "Login App"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json",
+        "text/html"
+    ],
+    "paths": {
+        "/signup": {
+            "get": {
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets Signup page with form, if already logged in, redirects to /user",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Posts the user form and creates a new user in the system",
+                "description": "Create new user in system",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "description": "User that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/User"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New user is created and user id is returned"
+                    },
+                    "403": {
+                        "description": "Username already exists"
+                    },
+                    "500": {
+                        "description": "Error in database"
+                    }
+                }
+            }
+        },
+        "/signin": {
+            "get": {
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets Signin page with form, if already logged in, redirects to /user",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Posts the user form with username and password and logs in the user in the system",
+                "description": "Logs in the user",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "description": "User that we want to sign in",
+                    "schema": {
+                        "$ref": "#/definition/UserForSignin"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Signed In successfully"
+                    },
+                    "403": {
+                        "description": "Invalid Credentials"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user details if logged in, else is redirected to /signin",
+                "responses": {
+                    "200": {
+                        "description": "User details in prefilled form",
+                        "schema": {
+                            "$ref": "#/definition/UserDetails"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "put": {
+                "summary": "Update user with given ID",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "user id"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "User that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/UserDetails"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User is updated",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User is logged out",
+                "responses": {
+                    "200": {
+                        "description": "Logged out successfully and is redirected to /signin"
+                    }
+                }
+            }
+        }
+
+    },
+    "definitions": {
+        "User": {
+            "required": [
+                "email",
+                "firstName",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "email": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "definition":
+    {
+        "UserForSignin": {
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "uniqueItems": true
+                }
+            }
+        },
+        "UserDetails":{
+            "required": [
+                "email",
+                "firstName"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
