@@ -38,7 +38,7 @@ exports.signup = function (req, res) {
 }
 
 /**
- * updateUser will update the existing user, or will create a new one.
+ * updateUser will update the existing user.
  */
 exports.updateUser = function (req, res) {
     const email = req.body.email;

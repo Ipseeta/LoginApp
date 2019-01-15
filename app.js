@@ -12,8 +12,8 @@ const auth = require('./routes/auth')(passport);
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-const port = process.env.PORT || 3000;
-const baseUrl = process.env.BASE_URL || 'http://localhost:'
+// Connect to MongoDB
+mongoose.connect(config.mongoConnectionString, { useNewUrlParser: true });
 
 let app = express();
 
@@ -23,17 +23,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+// For body-parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+ // persistent login sessions
 app.use(session({ secret: 'ae2b1fca515949e5d54fb22b8ed95575', resave: false, saveUninitialized: true, store: new RedisStore({ host: config.redis.host, port: config.redis.port, pass: config.redis.auth }) }));
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
+app.use(passport.session());
 
+// All our custom routes
 app.use('/', auth);
-
-console.log(`Server started on ${baseUrl}${port}`);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,6 +51,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-mongoose.connect(config.mongoConnectionString);
 
 module.exports = app;
