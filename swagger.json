@@ -52,7 +52,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "New user is created and user id is returned"
+                        "description": "New user is created and user id is returned and redirected to /signin"
                     },
                     "403": {
                         "description": "Username already exists"
