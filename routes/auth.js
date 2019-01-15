@@ -92,7 +92,9 @@ module.exports = function (passport) {
             invalidCredentials: !!req.query['invalid_credentials']
         });
     });
-
+    /**
+     * Signups an user
+     */
     router.route('/signup').post(UserController.signup);
 
     /**
