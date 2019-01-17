@@ -9,6 +9,9 @@ exports.signup = function (req, res) {
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
+    if (!username || username.trim() === '' || !password || password.trim() === '' || !email || email.trim() === '' || !firstName || firstName.trim() === '') {
+		return res.status(403).end();
+	}
     User.count({
         username: username
     }, function (err, count) {
@@ -44,7 +47,9 @@ exports.updateUser = function (req, res) {
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
-
+    if (!email || email.trim() === '' || !firstName || firstName.trim() === '') {
+		return res.status(403).end();
+	}
     User.updateOne({ _id: req.params.id }, { $set: {email: email, firstName: firstName, lastName: lastName}}).exec(function(err, user){
         if(err) {
             return res.status(403).end();

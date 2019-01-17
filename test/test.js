@@ -56,7 +56,8 @@ describe('Login App Tests (success cases)', function () {
         agent
             .put(baseUrl + '/user/' + id)
             .send({
-                firstName: "Ipseeta"
+                firstName: "Ipseeta",
+                email: email,
             })
             .set('Content-Type', 'application/x-www-form-urlencoded')
             .end((err, res) => {
