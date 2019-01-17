@@ -55,7 +55,7 @@
                         "description": "New user is created and user id is returned and redirected to /signin"
                     },
                     "403": {
-                        "description": "Username already exists"
+                        "description": "Username already exists or missing required parameter"
                     },
                     "500": {
                         "description": "Error in database"
@@ -149,6 +149,9 @@
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
+                    },
+                    "403": {
+                        "description": "Missing required parameter"
                     }
                 }
             }
